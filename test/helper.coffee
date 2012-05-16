@@ -16,6 +16,9 @@ should.be=
     should.be.contentType "application/json; charset=utf-8"
   css: () ->
     should.be.contentType "text/css; charset=UTF-8"
+  body: (expected) ->
+    it "should have body #{expected}", () ->
+      @res.body.should.eql expected
 
 should.have = should.be
 
@@ -68,11 +71,10 @@ upload = (config, cb) ->
 
 get = (path, options) ->
   options or= {}
+  options.path = path
 
   describe "GET #{path}", () ->
-    self = this
     before (done) ->
-      options.path = path
       helper.request options, (err, result) =>
         return done(err) if err?
         @res = result
@@ -84,8 +86,31 @@ helper.boundary = () -> "----WebKitFormBoundary1234567890ABCDEF"
 helper.upload = upload
 helper.makeBody = makeBody
 helper.request = request
-helper.startServer = startServer
-helper.stopServer = stopServer
+
+helper.app =
+  port: helper.port + 1
+  server: {}
+  start: (done) ->
+    app = require "#{__dirname}/app"
+    helper.app.server = http.createServer app
+    helper.app.server.listen helper.app.port, done
+  stop: (done) ->
+    #global teardown
+    helper.app.server.once "close", done
+    helper.app.server.close()
+
+helper.proxy =
+  port: helper.port
+  server: {}
+  start: (done) ->
+    proxy = require "#{__dirname}/proxy"
+    helper.proxy.server = require("net").createServer proxy
+    helper.proxy.server.listen helper.proxy.port, done
+
+  stop: (done) ->
+    helper.proxy.server.once "close", done
+    helper.proxy.server.close()
+
 helper.get = get
 
 module.exports = helper
