@@ -15,7 +15,7 @@
     "parsley": "*"
   },
   "devDependencies": {
-    "express": "*",
+    "express": "3.0.0alpha4",
     "mocha": "*",
     "should": "*",
     "coffee-script": "*"
