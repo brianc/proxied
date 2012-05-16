@@ -1,0 +1,27 @@
+{
+  "author": "Brian M. Carlson <brian@enginode.com> (enginode.com)",
+  "name": "proxied",
+  "description": "http proxy supporting pause()",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/brianc/proxied.git"
+  },
+  "main": "lib/",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha"
+  },
+  "dependencies": {
+    "parsley": "*"
+  },
+  "devDependencies": {
+    "express": "*",
+    "mocha": "*",
+    "should": "*",
+    "coffee-script": "*"
+  },
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  }
+}
