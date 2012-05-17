@@ -17,7 +17,7 @@ should.be=
   css: () ->
     should.be.contentType "text/css; charset=UTF-8"
   body: (expected) ->
-    it "should have body #{expected}", () ->
+    it "should have expected body content", () ->
       @res.body.should.eql expected
 
 should.have = should.be

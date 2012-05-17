@@ -42,7 +42,7 @@ appBehavior = (port) ->
         method: 'POST'
         port: port
         path: '/json'
-        headers: 
+        headers:
           "test-host": 'awesome-test-app.com'
           "content-type": "application/json"
           "content-length": body.length
@@ -89,4 +89,3 @@ describe "proxy", () ->
       should.have.statusCode 404
       should.be.html()
       should.have.body "not found"
-

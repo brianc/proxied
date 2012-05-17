@@ -1,2 +1,4 @@
 --require should
 --compilers coffee:coffee-script
+-R list
+--bail
