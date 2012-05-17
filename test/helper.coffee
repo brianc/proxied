@@ -93,7 +93,8 @@ helper.app =
   start: (done) ->
     app = require "#{__dirname}/app"
     helper.app.server = http.createServer app
-    helper.app.server.listen helper.app.port, done
+    helper.app.server.listen helper.app.port, () ->
+      done()
   stop: (done) ->
     #global teardown
     helper.app.server.once "close", done
@@ -105,7 +106,8 @@ helper.proxy =
   start: (done) ->
     proxy = require "#{__dirname}/proxy"
     helper.proxy.server = require("net").createServer proxy
-    helper.proxy.server.listen helper.proxy.port, done
+    helper.proxy.server.listen helper.proxy.port, () ->
+      done()
 
   stop: (done) ->
     helper.proxy.server.once "close", done
