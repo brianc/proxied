@@ -14,16 +14,6 @@ appBehavior = (port) ->
       should.be.html()
       should.have.body "okay"
 
-  helper.get "/huge"
-    port: port
-    headers: 'test-host': 'awesome-test-app.com'
-    expect: () ->
-      should.have.statusCode 200
-      should.have.contentType "text/plain"
-      expectedBody = "hi!"
-      body = expectedBody += expectedBody for n in [0..10]
-      should.have.body body
-
   helper.get "/json",
     port: port,
     headers:
