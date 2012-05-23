@@ -1,4 +1,5 @@
 net = require "net"
+http = require "http"
 
 helper = require "#{__dirname}/helper"
 should = require "should"
@@ -14,18 +15,21 @@ proxyTestBehavior = () ->
 
 
 describe "early request disconnect", () ->
-  proxyTestBehavior.call(this)
+  proxyTestBehavior.call this
+
+  it "terminates cleanly"
+
+describe "unparsable request", () ->
+  proxyTestBehavior.call this
+
+  before (done) ->
+    @socket = new net.Socket()
+    @socket.connect helper.proxy.port
+    @socket.on "connect", () =>
+      @socket.write "asdf TEST TEST \r\n\r\n\r\n\r\n", "utf8", done
 
   it "closes socket", (done) ->
-    socket = new net.Socket()
-    socket.connect helper.proxy.port
-    socket.on "connect", () ->
-      socket.write "asdf"
-      setTimeout socket.end.bind(socket), 50
-    socket.on "end", done
-    socket.on "error", done
+    @socket.on "end", done
 
-describe "garbage socket", () ->
-  proxyTestBehavior.call(this)
-
-  it "closes socket"
+  it "passes error to callback", () ->
+    should.exist helper.proxy.getLastError()

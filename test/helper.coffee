@@ -1,6 +1,11 @@
 http = require "http"
 should = require "should"
 
+doExit = process.exit
+process.exit = (code) ->
+  doExit code if code
+#let the event loop die
+
 should.be=
   statusCode: (code) ->
     it "should have status code #{code}", () ->
@@ -105,13 +110,17 @@ helper.proxy =
   server: {}
   start: (done) ->
     proxy = require "#{__dirname}/proxy"
-    helper.proxy.server = require("net").createServer proxy
+    helper.proxy.server = require("net").createServer proxy.listener
     helper.proxy.server.listen helper.proxy.port, () ->
       done()
 
   stop: (done) ->
     helper.proxy.server.once "close", done
     helper.proxy.server.close()
+
+  getLastError:() ->
+    proxy = require "#{__dirname}/proxy"
+    proxy.getLastError.bind(proxy)
 
 helper.get = get
 
